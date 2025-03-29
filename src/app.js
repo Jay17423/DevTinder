@@ -3,14 +3,18 @@ const express = require("express");
 const app = express();
 
 
-app.get("/ab?c ", (req, res) => {
+// app.get("/ab?c ", (req, res) => {
+//   res.send("FirstName: Jay, LastName: Prakash");
+// })
+
+// app.get("/ab+ c ", (req, res) => {
+//   res.send("FirstName: Jay, LastName: Prakash");
+// })
+
+app.get("/user/:userId", (req, res) => {
+  console.log(req.params);
   res.send("FirstName: Jay, LastName: Prakash");
 })
-
-app.get("/ab+ c ", (req, res) => {
-  res.send("FirstName: Jay, LastName: Prakash");
-})
-
 
 app.get("/ab*cd", (req, res) => {
   res.send("FirstName: Jay, LastName: Prakash");
