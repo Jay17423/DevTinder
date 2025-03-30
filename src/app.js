@@ -2,38 +2,21 @@ const express = require("express");
 
 const app = express();
 
-
-// app.get("/ab?c ", (req, res) => {
-//   res.send("FirstName: Jay, LastName: Prakash");
-// })
-
-// app.get("/ab+ c ", (req, res) => {
-//   res.send("FirstName: Jay, LastName: Prakash");
-// })
-
-app.get("/user/:userId", (req, res) => {
-  console.log(req.params);
-  res.send("FirstName: Jay, LastName: Prakash");
-})
-
-app.get("/ab*cd", (req, res) => {
-  res.send("FirstName: Jay, LastName: Prakash");
-})
-
-
-
-
-app.get("/user", (req, res) => {
-  res.send("FirstName: Jay, LastName: Prakash");
-})
-
-app.post("/user", (req, res) => {
-  // console.log("save data to database");
-  res.send("Data saved to database");
-})
-
-app.use("/test", (req, res) => {
-  res.send("Hello from the server!"); 
-});
+app.use(
+  "/user",
+  (req, res,next) => {
+    next();
+    res.send("Response from first middleware");
+  },
+  (req, res) => {
+    res.send("Response from second middleware");
+  },
+  (req, res) => {
+    res.send("Response from Third middleware");
+  },
+  (req, res) => {
+    res.send("Response from fourth middleware");
+  }
+);
 
 app.listen(3000, () => console.log("Server  running on port 3000"));
