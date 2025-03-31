@@ -16,6 +16,33 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//Get User details by the Email id
+
+app.get("/user", async (req,res)=>{
+  const email = req.body.email;
+  try {
+    const user = await User.findOne({email:email});
+    if(user.length === 0){
+      return res.status(404).send("User not found");
+    }
+    res.send(user);
+  } catch (error) {
+      res.status(500).send("Something went wrong");
+  }
+
+})
+
+//Get All the user details
+
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 connectDB()
   .then(() => {
     console.log("Database connected Successfully");
