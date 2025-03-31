@@ -5,19 +5,23 @@ const User = require("./models/user.js");
 
 app.post("/signup", async (req, res) => {
   const userObj = {
-    firstName: "Virat",
+    firstName: "jatn",
     lastName: "Kohli",
     email: "4k2wV@example.com",
     password: "123456",
     age: 21,
     gender: "male",
-  }
+  };
 
-  //Creating a new instance of the user model
-  const user = new User(userObj);
-  await user.save();
-  res.send("User created successfully");
-})
+  try {
+    //Creating a new instance of the user model
+    const user = new User(userObj);
+    await user.save();
+    res.send("User created successfully");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 connectDB()
   .then(() => {
@@ -28,4 +32,3 @@ connectDB()
     console.log("DataBase cannot be connected");
     console.log(err);
   });
-                      
