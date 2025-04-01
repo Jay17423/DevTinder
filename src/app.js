@@ -7,6 +7,9 @@ app.use(express.json());
 app.post("/signup", async (req, res) => {
   const userObj = req.body;
   try {
+    if(userObj.skills.length > 5){
+      throw new Error("Skills cannot be more than 5")
+    }
     //Creating a new instance of the user model
     const user = new User(userObj);
     await user.save();
