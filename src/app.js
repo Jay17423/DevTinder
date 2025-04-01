@@ -18,19 +18,18 @@ app.post("/signup", async (req, res) => {
 
 //Get User details by the Email id
 
-app.get("/user", async (req,res)=>{
+app.get("/user", async (req, res) => {
   const email = req.body.email;
   try {
-    const user = await User.findOne({email:email});
-    if(user.length === 0){
+    const user = await User.findOne({ email: email });
+    if (user.length === 0) {
       return res.status(404).send("User not found");
     }
     res.send(user);
   } catch (error) {
-      res.status(500).send("Something went wrong");
+    res.status(500).send("Something went wrong");
   }
-
-})
+});
 
 //Get All the user details
 
@@ -45,30 +44,28 @@ app.get("/feed", async (req, res) => {
 
 // Delete the user
 
-app.delete("/user", async (req,res)=>{
+app.delete("/user", async (req, res) => {
   const userId = req.body.userId;
-  try{
+  try {
     const user = await User.findByIdAndDelete(userId);
     res.send("User deleted successfully");
-  }
-  catch (error) {
+  } catch (error) {
     res.status(500).send(error.message);
   }
-})
+});
 
 // Update the user Details
 
-app.patch("/user", async (req,res)=>{
+app.patch("/user", async (req, res) => {
   const userId = req.body.userId;
   const data = req.body;
-  try{
-    await User.findByIdAndUpdate(userId,data);
-    res.send("User Updated Successfully")
-  }
-  catch (error) {
+  try {
+    await User.findByIdAndUpdate(userId, data,{ runValidators: true });
+    res.send("User Updated Successfully");
+  } catch (error) {
     res.status(500).send(error.message);
   }
-})
+});
 
 connectDB()
   .then(() => {
