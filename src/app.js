@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/user.js");
 app.use(express.json());
 const { validateSignUpData } = require("./utils/validation.js");
+const validator = require("validator");
 
 app.post("/signup", async (req, res) => {
   try {
@@ -23,6 +24,30 @@ app.post("/signup", async (req, res) => {
     res.send("User saved successfully");
   } catch (error) {
     res.status(500).send("Error saving the user " + error.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    //Check for the email validation
+    if (!validator.isEmail(email)) {
+      throw new Error("Email is not valid");
+    }
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if(isPasswordValid){
+      res.send("User logged in successfully");
+    }
+    else{
+      throw new Error("Password is not valid");
+    }
+  } catch (error) {
+    res.status(500).send("ERROR " + error.message);
   }
 });
 
