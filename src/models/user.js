@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    validate(vale){
+      if(!validator.isStrongPassword(vale)){
+        throw new Error("Your password is not strong");
+      }
+    }
   },
   age: {
     type: Number,
@@ -45,6 +50,11 @@ const userSchema = new mongoose.Schema({
   photoUrl:{
     type: String,
     default:"https://th.bing.com/th/id/OIP.YVs8BKxuQUm7BjnoPvrwBgAAAA?rs=1&pid=ImgDetMain",
+    validate(vale){
+      if(!validator.isURL(vale)){
+        throw new Error("Photo url is not valid");
+      }
+    }
   },
   about:{
     type: String,
