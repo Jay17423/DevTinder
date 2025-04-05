@@ -7,7 +7,8 @@ app.use(express.json());
 const { validateSignUpData } = require("./utils/validation.js");
 const validator = require("validator");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth.js");
 
 app.use(cookieParser());
 
@@ -31,28 +32,14 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.get("/profile" ,async(req,res) =>{
- try {
-  const cookie = req.cookies;
-  const {token} = cookie;
-  if(!token){
-    throw new Error("Unauthorized");
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.send(user);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
-  const decodeMsg = await jwt.verify(token,"process.env.JWT_SECRET_KEY");
-  const {_id} = decodeMsg;
-  const user = await User.findById(_id);
-  if(!user){
-    throw new Error("User not found");
-  }
-  res.send(user)
-  
- } catch (error) {
-  res.status(500).send(error.message);
-  
- }
-  
-})
-
+});
 
 app.post("/login", async (req, res) => {
   try {
@@ -67,15 +54,17 @@ app.post("/login", async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(isPasswordValid){
+    if (isPasswordValid) {
       //Create  a jwt token
-      const token = await jwt.sign({_id:user.id},"process.env.JWT_SECRET_KEY");
+      const token = await jwt.sign(
+        { _id: user.id },
+        process.env.JWT_SECRET_KEY
+      );
       // console.log(token);
       // Add the token to the cookie and send the response back
-      res.cookie("token",token)
+      res.cookie("token", token);
       res.send("User logged in successfully");
-    }
-    else{
+    } else {
       throw new Error("Password is not valid");
     }
   } catch (error) {
