@@ -7,7 +7,7 @@ app.use(express.json());
 const { validateSignUpData } = require("./utils/validation.js");
 const validator = require("validator");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
+
 const { userAuth } = require("./middlewares/auth.js");
 
 app.use(cookieParser());
@@ -44,15 +44,11 @@ app.post("/login", async (req, res) => {
       throw new Error("User not found");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       //Create  a jwt token
-      const token = await jwt.sign(
-        { _id: user.id },
-        process.env.JWT_SECRET_KEY,
-        { expiresIn: "1d" }
-      );
-      res.cookie("token", token);
+      const token = await user.getJWT();
+      res.cookie("token", token, { expires: new Date(Date.now() + 900000) });
       res.send("User logged in successfully");
     } else {
       throw new Error("Password is not valid");
