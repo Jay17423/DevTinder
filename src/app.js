@@ -32,15 +32,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.get("/profile", userAuth, async (req, res) => {
-  try {
-    const user = req.user;
-    res.send(user);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,10 +49,9 @@ app.post("/login", async (req, res) => {
       //Create  a jwt token
       const token = await jwt.sign(
         { _id: user.id },
-        process.env.JWT_SECRET_KEY
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1d" }
       );
-      // console.log(token);
-      // Add the token to the cookie and send the response back
       res.cookie("token", token);
       res.send("User logged in successfully");
     } else {
@@ -72,74 +62,19 @@ app.post("/login", async (req, res) => {
   }
 });
 
-//Get User details by the Email id
-
-app.get("/user", async (req, res) => {
-  const email = req.body.email;
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const user = await User.findOne({ email: email });
-    if (user.length === 0) {
-      return res.status(404).send("User not found");
-    }
+    const user = req.user;
     res.send(user);
   } catch (error) {
-    res.status(500).send("Something went wrong");
-  }
-});
-
-//Get All the user details
-
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-// Delete the user
-
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findByIdAndDelete(userId);
-    res.send("User deleted successfully");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
-// Update the user Details
-
-app.patch("/user/:userId", async (req, res) => {
-  const userId = req.params?.userId;
-  const data = req.body;
-
-  try {
-    const ALLOWED_UPDATES = [
-      ,
-      "photoUrl",
-      "about",
-      "gender",
-      "age",
-      "skills",
-      "password",
-    ];
-    const isUpdateAllowed = Object.keys(data).every((k) =>
-      ALLOWED_UPDATES.includes(k)
-    );
-    if (!isUpdateAllowed) {
-      return res.status(400).send("Update is not allowed");
-    }
-    if (data.skills.length > 5) {
-      throw new Error("Skills cannot be more than 5");
-    }
-    await User.findByIdAndUpdate(userId, data, { runValidators: true });
-    res.send("User Updated Successfully");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  const user = req.user;
+  console.log("Send Connection Request");
+  res.send(user.firstName + " Sent Connection Request");
 });
 
 connectDB()
