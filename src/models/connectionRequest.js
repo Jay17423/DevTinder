@@ -22,6 +22,17 @@ const connectionRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+//.pre hook always runs before the save method is called
+// and it is used to perform some operations before saving the document to the database
+
+connectionRequestSchema.pre("save", function (next) {
+  const connectionRequest = this;
+  if (connectionRequest.fromUserId.equals(connectionRequest.toUserId)) {
+    throw new Error("You cannot send a connection request to yourself");
+  }
+  next();
+});
+
 const ConnectionRequesModel = new mongoose.model(
   "ConnectionRequest",
   connectionRequestSchema

@@ -21,13 +21,6 @@ requestRouter.post(
         });
       }
 
-      //Check if the fromUserId and toUserId are the same
-      if (fromUserId.toString() === toUserId.toString()) {
-        return res.status(400).json({
-          message: "You cannot send a connection request to yourself",
-        });
-      }
-
       //Check if the fromUserId and senderId present in the DataBase
 
       const toUser = await User.findById(toUserId);
