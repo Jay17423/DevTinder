@@ -5,16 +5,16 @@ const connectionRequestSchema = new mongoose.Schema(
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      require: true,
+      required: true,
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      require: true,
+      required: true,
     },
     status: {
       type: String,
-      require: true,
+      required: true,
       enum: {
         values: ["ignored", "intrested", "accepted", "rejected"],
         message: `{values} is incorrect status type`,
@@ -24,7 +24,8 @@ const connectionRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-connectionRequestSchema.index({ fromUserId: 1 }, { unique: true });
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 }, { unique: true });
+
 
 //.pre hook always runs before the save method is called
 // and it is used to perform some operations before saving the document to the database
