@@ -4,7 +4,7 @@ import { BASE_URL } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 const Feed = () => {
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
   const getFeed = async () => {
     if (feed) return;
