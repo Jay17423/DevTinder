@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const authRouter = express.Router();
 
+
 authRouter.post("/signup", async (req, res) => {
   try {
     //Validate the data
@@ -42,7 +43,7 @@ authRouter.post("/login", async (req, res) => {
       //Create  a jwt token
       const token = await user.getJWT();
       res.cookie("token", token, { expires: new Date(Date.now() + 900000) });
-      res.send("User logged in successfully")
+      res.send(user)
     } else {
       throw new Error("Password is not valid");
     }
