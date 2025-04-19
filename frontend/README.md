@@ -13,3 +13,4 @@
 - Install axios
 - CORS- install cors in the backend -> add middleware to with configuration origin : frontend url and credential : true
 - Whenever i am making api call we have to apss  axios => {withCredentials: true}
+- Install redux toolkit
