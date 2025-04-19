@@ -4,22 +4,17 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { removeUsers } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
-  console.log(user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
-      const res = await axios.post(
-        BASE_URL + "/logout",
-        {},
-        { withCredentials: true }
-      );
-      dispatch(removeUsers())
+      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      dispatch(removeUsers());
       return navigate("/login");
     } catch (error) {
       console.log(error);
@@ -29,7 +24,9 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-300 shadow-sm">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">👨‍💻DevTinder</a>
+        <Link to={"/"} className="btn btn-ghost text-xl">
+          👨‍💻DevTinder
+        </Link>
       </div>
 
       {user && (
@@ -51,16 +48,16 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a className="justify-between">
+                <Link to={"/profile"} className="justify-between">
                   Profile
                   <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link>Settings</Link>
               </li>
               <li>
-                <a onClick={handleLogout}>Logout</a>
+                <Link onClick={handleLogout}>Logout</Link>
               </li>
             </ul>
           </div>
