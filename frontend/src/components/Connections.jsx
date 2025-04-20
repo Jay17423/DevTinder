@@ -6,9 +6,10 @@ import { addConnections } from "../utils/connectionSlice";
 
 const Connections = () => {
   const dispatch = useDispatch();
+  const connections = useSelector((store) => store.connection);
   const handleGetConnections = async () => {
     try {
-      const res = await axios.get(BASE_URL+"/user/connections", {
+      const res = await axios.get(BASE_URL + "/user/connections", {
         withCredentials: true,
       });
       dispatch(addConnections(res.data.data));
@@ -17,14 +18,44 @@ const Connections = () => {
     }
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     handleGetConnections();
-  },[])
+  }, []);
+
+  if (!connections) return;
+  if (connections.length === 0) {
+    return (
+      <div className="flex justify-center p-4 bg-base-200 h-screen">
+        <h1 className="text-bold text-2xl">No Connections Found</h1>
+      </div>
+    );
+  }
   return (
-    <div className="flex justify-center p-4 bg-base-200 h-screen">
-      <h1 className="text-bold text-2xl">Connections</h1>
+    <div className="flex justify-center p-4 bg-base-200 min-h-screen">
+      <div className="w-full max-w-2xl">
+        <h1 className="text-bold text-2xl text-center mb-4">Connections</h1>
+        <div className="flex flex-col gap-4">
+          {connections.map((user) => (
+            <div key={user._id} className="card bg-base-300 shadow-md p-4">
+              <div className="flex items-center gap-4">
+                <img
+                  src={user.photoUrl}
+                  alt={user.firstName}
+                  className="w-16 h-16 rounded-full"
+                />
+                <div className="flex-grow">
+                  <h2 className="text-xl font-bold">{`${user.firstName} ${user.lastName}`}</h2>
+                </div>
+                <div className="flex gap-2">
+                  <button className="btn btn-success">Accept</button>
+                  <button className="btn btn-error">Reject</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
-
 export default Connections;
