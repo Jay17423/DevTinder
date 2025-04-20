@@ -19,7 +19,8 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
     if(!validateProfileEditData(req)){
-      throw new Error("Invalid Edit request");
+      res.status(400).send("Please provide valid data");
+      return;
     }
 
     const loggedInUser = req.user;
@@ -33,7 +34,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     });
   
   } catch (error) {
-    res.send(error.message);
+    res.status(400).send(error.message);
   }
 
 })
