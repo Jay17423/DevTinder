@@ -71,12 +71,16 @@ requestRouter.post(
           message: "Invalid status type " + req.params.status,
         });
       }
-
+      
+       
+      
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId,
         toUserId: loggedInUser._id,
         status: "intrested",
       });
+      console.log(connectionRequest);
+      
       if (!connectionRequest) {
         return res.status(404).json({
           message: "Connection request not found!",

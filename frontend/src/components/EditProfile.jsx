@@ -4,10 +4,9 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import Toast from "../components/Toast"
+import Toast from "../components/Toast";
 
 const EditProfile = ({ user }) => {
-
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
@@ -35,9 +34,9 @@ const EditProfile = ({ user }) => {
       );
       dispatch(addUser(res.data.data));
       setToast(true);
-      setTimeout(() =>{
+      setTimeout(() => {
         setToast(false);
-      },3000)
+      }, 3000);
     } catch (error) {
       setError(error.response.data);
       console.error("Error updating profile:", error);
@@ -118,19 +117,18 @@ const EditProfile = ({ user }) => {
                       <option value="Other">Other</option>
                     </select>
                   </label>
-
                   <label className="form-control w-full max-w-xs">
-                    <div className="label  mb-1">
+                    <div className="label mb-1">
                       <span className="label-text">About</span>
                     </div>
-                    <input
-                      type="text"
-                      placeholder=""
-                      className="input mb-3 input-bordered w-full max-w-xs"
+                    <textarea
+                      placeholder="Tell us about yourself"
+                      className="textarea mb-3 textarea-bordered w-full max-w-xs"
                       value={about}
                       onChange={(e) => setAbout(e.target.value)}
                     />
                   </label>
+
                   <p className="text-red-600">{error}</p>
                 </div>
               </div>
@@ -142,7 +140,11 @@ const EditProfile = ({ user }) => {
                 >
                   save profile
                 </button>
-               {toast && <Toast message={toast ? "Profile updated successfully" : ""} />}
+                {toast && (
+                  <Toast
+                    message={toast ? "Profile updated successfully" : ""}
+                  />
+                )}
               </div>
             </div>
           </div>
