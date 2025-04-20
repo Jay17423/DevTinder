@@ -4,6 +4,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import Toast from "../components/Toast"
 
 const EditProfile = ({ user }) => {
 
@@ -15,6 +16,7 @@ const EditProfile = ({ user }) => {
   const [about, setAbout] = useState(user?.about);
   const [photoUrl, setPhotoUrl] = useState(user?.photoUrl);
   const [error, setError] = useState(null);
+  const [toast, setToast] = useState(false);
 
   const handleUpdateProfile = async () => {
     setError(null);
@@ -31,10 +33,11 @@ const EditProfile = ({ user }) => {
         },
         { withCredentials: true }
       );
-      console.log(res.data.data);
-      
       dispatch(addUser(res.data.data));
-      alert("Profile Updated Successfully");
+      setToast(true);
+      setTimeout(() =>{
+        setToast(false);
+      },3000)
     } catch (error) {
       setError(error.response.data);
       console.error("Error updating profile:", error);
@@ -139,6 +142,7 @@ const EditProfile = ({ user }) => {
                 >
                   save profile
                 </button>
+               {toast && <Toast message={toast ? "Profile updated successfully" : ""} />}
               </div>
             </div>
           </div>
