@@ -79,7 +79,7 @@ requestRouter.post(
         toUserId: loggedInUser._id,
         status: "intrested",
       });
-      console.log(connectionRequest);
+      // console.log(connectionRequest);
       
       if (!connectionRequest) {
         return res.status(404).json({
