@@ -48,11 +48,6 @@ const Connections = () => {
                  { user.age && user.gender &&  <p>{`${user.age} ${user.gender}`}</p>}
                   <h3 className="" >{user.about.slice(0,80)+"......"}</h3>
                 </div>
-                
-                <div className="flex gap-2">
-                  <button className="btn btn-success">Accept</button>
-                  <button className="btn btn-error">Reject</button>
-                </div>
               </div>
             </div>
           ))}
