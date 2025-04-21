@@ -14,9 +14,22 @@ const Requests = () => {
         withCredentials: true,
       });
 
-      dispatch(addRequest(res.data.connectionRequests)); // Store the entire connectionRequests array
+      dispatch(addRequest(res.data.connectionRequests));
     } catch (error) {
       console.log("Error fetching requests:", error);
+    }
+  };
+
+  const reviewRequest = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/request/review/${status}/${_id}`,
+        {},
+        { withCredentials: true }
+      );
+      console.log("Request reviewed:", res.data);
+    } catch (error) {
+      console.log("Error reviewing request:", error);
     }
   };
 
@@ -37,10 +50,12 @@ const Requests = () => {
   return (
     <div className="flex justify-center p-4 bg-base-200 min-h-screen">
       <div className="w-full max-w-2xl">
-        <h1 className="text-bold text-3xl text-white text-center mb-4">Connection Requests</h1>
+        <h1 className="text-bold text-3xl text-white text-center mb-4">
+          Connection Requests
+        </h1>
         <div className="flex flex-col gap-4">
           {requests.map((request) => {
-            const user = request.fromUserId; 
+            const user = request.fromUserId;
             return (
               <div key={request._id} className="card bg-base-300 shadow-md p-4">
                 <div className="flex items-center gap-4">
@@ -51,14 +66,28 @@ const Requests = () => {
                   />
                   <div className="flex-grow">
                     <h2 className="text-xl font-bold">{`${user.firstName} ${user.lastName}`}</h2>
-                    <p className="text-gray-400">{user.about?.slice(0, 80) + "..."}</p>
+                    <p className="text-gray-400">
+                      {user.about?.slice(0, 80) + "..."}
+                    </p>
                     {user.skills.length > 0 && (
-                      <p className="text-sm text-gray-600">Skills: {user.skills.join(", ")}</p>
+                      <p className="text-sm text-gray-600">
+                        Skills: {user.skills.join(", ")}
+                      </p>
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <button className="btn btn-success">Accept</button>
-                    <button className="btn btn-error">Reject</button>
+                    <button
+                      className="btn btn-error"
+                      onClick={() => reviewRequest("rejected", request._id)}
+                    >
+                      Reject
+                    </button>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => reviewRequest("accepted", request._id)}
+                    >
+                      Accept
+                    </button>
                   </div>
                 </div>
               </div>
