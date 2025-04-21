@@ -33,7 +33,7 @@ const Connections = () => {
   return (
     <div className="flex justify-center p-4 bg-base-200 min-h-screen">
       <div className="w-full max-w-2xl">
-        <h1 className="text-bold text-2xl text-center mb-4">Connections</h1>
+        <h1 className="text-bold text-3xl text-white text-center mb-4">Connections</h1>
         <div className="flex flex-col gap-4">
           {connections.map((user) => (
             <div key={user._id} className="card bg-base-300 shadow-md p-4">
@@ -45,7 +45,10 @@ const Connections = () => {
                 />
                 <div className="flex-grow">
                   <h2 className="text-xl font-bold">{`${user.firstName} ${user.lastName}`}</h2>
+                 { user.age && user.gender &&  <p>{`${user.age} ${user.gender}`}</p>}
+                  <h3 className="" >{user.about.slice(0,80)+"......"}</h3>
                 </div>
+                
                 <div className="flex gap-2">
                   <button className="btn btn-success">Accept</button>
                   <button className="btn btn-error">Reject</button>
