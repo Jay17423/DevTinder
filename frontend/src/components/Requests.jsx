@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequest } from "../utils/requestSlice";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ const Requests = () => {
       });
 
       dispatch(addRequest(res.data.connectionRequests));
+     
     } catch (error) {
       console.log("Error fetching requests:", error);
     }
@@ -27,7 +28,7 @@ const Requests = () => {
         {},
         { withCredentials: true }
       );
-      console.log("Request reviewed:", res.data);
+      dispatch(removeRequest(_id))
     } catch (error) {
       console.log("Error reviewing request:", error);
     }
