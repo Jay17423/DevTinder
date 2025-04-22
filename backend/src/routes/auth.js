@@ -1,10 +1,9 @@
 const express = require("express");
-const {validateSignUpData} = require("../utils/validation.js");
+const { validateSignUpData } = require("../utils/validation.js");
 const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const authRouter = express.Router();
-
 
 authRouter.post("/signup", async (req, res) => {
   try {
@@ -19,8 +18,10 @@ authRouter.post("/signup", async (req, res) => {
       email,
       password: passwordHash,
     });
-    await user.save();
-    res.send("User saved successfully");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+    res.cookie("token", token, { expires: new Date(Date.now() + 900000) });
+    res.json({ message: "User saved successfully", user: savedUser });
   } catch (error) {
     res.status(500).send("Error saving the user " + error.message);
   }
@@ -43,7 +44,7 @@ authRouter.post("/login", async (req, res) => {
       //Create  a jwt token
       const token = await user.getJWT();
       res.cookie("token", token, { expires: new Date(Date.now() + 900000) });
-      res.send(user)
+      res.send(user);
     } else {
       throw new Error("Password is not valid");
     }
@@ -54,13 +55,11 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
   try {
-    res.cookie("token",null, { expires: new Date(Date.now()) });
+    res.cookie("token", null, { expires: new Date(Date.now()) });
     res.send("User logged out successfully");
-    
   } catch (error) {
     throw new Error("Error logging out the user " + error.message);
   }
-
 });
 
 module.exports = authRouter;
