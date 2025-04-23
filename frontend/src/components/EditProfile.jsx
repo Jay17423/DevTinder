@@ -38,99 +38,119 @@ const EditProfile = ({ user }) => {
         setToast(false);
       }, 3000);
     } catch (error) {
-      setError(error?.response?.data || "An error occurred");
+      setError(error.response.data);
       console.error("Error updating profile:", error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 p-4">
-      <div className="w-full sm:w-96 bg-base-300 rounded-xl shadow-md">
-        <div className="p-6">
-          <h2 className="text-center text-xl font-semibold mb-6">Edit Profile</h2>
-          <div className="space-y-4">
-            <label className="block">
-              <span className="text-sm font-medium">First Name</span>
-              <input
-                type="text"
-                className="input input-bordered w-full mt-1"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Last Name</span>
-              <input
-                type="text"
-                className="input input-bordered w-full mt-1"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Photo URL</span>
-              <input
-                type="text"
-                className="input input-bordered w-full mt-1"
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Age</span>
-              <input
-                type="number"
-                className="input input-bordered w-full mt-1"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">Gender</span>
-              <select
-                className="select select-bordered w-full mt-1"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Gender
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium">About</span>
-              <textarea
-                className="textarea textarea-bordered w-full mt-1"
-                placeholder="Tell us about yourself"
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-              />
-            </label>
-            {error && <p className="text-red-600 text-sm">{error}</p>}
-          </div>
+    <div className="flex  justify-center items-center  bg-base-200">
+      <div>
+        <div className="flex justify-center items-center mx-10 h-screen bg-base-200">
+          <div className="card card-border bg-base-300 w-96">
+            <div className="card-body">
+              <h2 className="card-title justify-center">Edit Profile</h2>
+              <div>
+                <div className="mb-4">
+                  <label className="form-control w-full  max-w-xs">
+                    <div className="label mb-1">
+                      <span className="label-text">First Name</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder=""
+                      className="input mb-3 input-bordered w-full max-w-xs"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label  mb-1">
+                      <span className="label-text">Last Name</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder=""
+                      className="input mb-3 input-bordered w-full max-w-xs"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label  mb-1">
+                      <span className="label-text">Photo Url</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder=""
+                      className="input mb-3 input-bordered w-full max-w-xs"
+                      value={photoUrl}
+                      onChange={(e) => setPhotoUrl(e.target.value)}
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label  mb-1">
+                      <span className="label-text">Age</span>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder=""
+                      className="input mb-3 input-bordered w-full max-w-xs"
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                    />
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label mb-1">
+                      <span className="label-text">Gender</span>
+                    </div>
+                    <select
+                      className="select mb-3 select-bordered w-full max-w-xs"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Gender
+                      </option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </label>
+                  <label className="form-control w-full max-w-xs">
+                    <div className="label mb-1">
+                      <span className="label-text">About</span>
+                    </div>
+                    <textarea
+                      placeholder="Tell us about yourself"
+                      className="textarea mb-3 textarea-bordered w-full max-w-xs"
+                      value={about}
+                      onChange={(e) => setAbout(e.target.value)}
+                    />
+                  </label>
 
-          <div className="mt-6 flex justify-center">
-            <button
-              className="btn btn-primary w-full"
-              onClick={handleUpdateProfile}
-            >
-              Save Profile
-            </button>
+                  <p className="text-red-600">{error}</p>
+                </div>
+              </div>
+
+              <div className="card-actions justify-center py-3">
+                <button
+                  className="btn btn-primary"
+                  onClick={handleUpdateProfile}
+                >
+                  save profile
+                </button>
+                {toast && (
+                  <Toast
+                    message={toast ? "Profile updated successfully" : ""}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {toast && (
-        <Toast message="Profile updated successfully" />
-      )}
-
-      {/* UserCard can remain as-is */}
-      <div className="mt-6 w-full sm:w-96">
-        <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
-      </div>
+      <UserCard user={{ firstName, lastName, age, gender, about, photoUrl }} />
     </div>
   );
 };
