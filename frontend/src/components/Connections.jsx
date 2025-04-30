@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/connectionSlice";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
   const dispatch = useDispatch();
@@ -30,10 +31,13 @@ const Connections = () => {
       </div>
     );
   }
+
   return (
     <div className="flex justify-center p-4 bg-base-200 min-h-screen">
       <div className="w-full max-w-2xl">
-        <h1 className="text-bold text-3xl text-white text-center mb-4">Connections</h1>
+        <h1 className="text-bold text-3xl text-white text-center mb-4">
+          Connections
+        </h1>
         <div className="flex flex-col gap-4">
           {connections.map((user) => (
             <div key={user._id} className="card bg-base-300 shadow-md p-4">
@@ -45,9 +49,13 @@ const Connections = () => {
                 />
                 <div className="flex-grow">
                   <h2 className="text-xl font-bold">{`${user.firstName} ${user.lastName}`}</h2>
-                 { user.age && user.gender &&  <p>{`${user.age} ${user.gender}`}</p>}
-                  <h3 className="" >{user.about.slice(0,80)+"......"}</h3>
+                  {user.age && user.gender && (
+                    <p>{`${user.age} ${user.gender}`}</p>
+                  )}
+                  <h3>{user.about.slice(0, 80) + "..."}</h3>
                 </div>
+                <Link to={`/chat/${user._id}`}><button className="btn btn-primary">Chat</button></Link>
+                
               </div>
             </div>
           ))}
@@ -56,4 +64,5 @@ const Connections = () => {
     </div>
   );
 };
+
 export default Connections;
